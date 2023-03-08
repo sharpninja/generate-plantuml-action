@@ -19,10 +19,4 @@ jobs:
         run: "npm run test:ci"
         env:
           CI: true
-      - name: report test results
-        uses: IgnusG/jest-report-action@v2.3.3
-        if: always()
-        with:
-          access-token: ${{ secrets.GITHUB_TOKEN }}
-          check-name: Unit Tests
 
