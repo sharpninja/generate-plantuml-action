@@ -25,9 +25,4 @@ jobs:
         with:
           access-token: ${{ secrets.GITHUB_TOKEN }}
           check-name: Unit Tests
-      - name: CodeClimate coverage report
-        uses: aktions/codeclimate-test-reporter@v1
-        if: ${{ env.CC_TEST_REPORTER_ID != '' }}
-        with:
-          codeclimate-test-reporter-id: ${{ secrets.CC_TEST_REPORTER_ID }}
-          command: after-build
+
