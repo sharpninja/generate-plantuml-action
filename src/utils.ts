@@ -41,6 +41,7 @@ export function retrieveCodes(files) {
             })
             return accum.concat(codes);
         }
+        console.log(accum);
         return accum;
     }, []);
 }
@@ -67,7 +68,7 @@ function puFromMd(markdown) {
             })
         }
         const t = umlType || 'uml';
-        return accum.concat({
+        const results = accum.concat({
             name,
             code: [
                 `@start${t}`,
@@ -76,6 +77,8 @@ function puFromMd(markdown) {
                 ''
             ].join("\n"),
         })
+        console.log(results);
+        return results;
     }, []);
 }
 
@@ -87,14 +90,22 @@ export async function getCommitsFromPayload(octokit, payload) {
     const res = await Promise.all(commits.map(commit => octokit.repos.getCommit({
         owner, repo, ref: commit.id
     })));
-    return res.map(res => (<any>res).data);
+    const results = res.map(res => (<any>res).data);
+    
+    console.log(results);
+    
+    return results;
 }
 
 export function updatedFiles(commits) {
-    return uniq(commits.reduce(
+    const files = uniq(commits.reduce(
         (accum: any[], commit) => accum.concat(
             commit.files.filter(f => f.status !== 'removed').map(f => f.filename)
         ),
         []
     ));
+    
+    console.log(files);
+    
+    return files;
 }
