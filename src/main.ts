@@ -1,4 +1,4 @@
-// TODO logging.
+// TODO logging. YES
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 const axios = require('axios');
