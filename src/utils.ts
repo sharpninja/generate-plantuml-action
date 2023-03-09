@@ -127,18 +127,18 @@ export async function getCommitsFromPayload(octokit, payload) {
     }
 }
 
-export function updatedFiles(commits) {
-    const files = uniq(commits.reduce(
-        (accum: any[], commit) => accum.concat(
-            commit.files.filter(f => f.status !== 'removed').map(f => f.filename)
-        ),
-        []
-    ));
+// export function updatedFiles(commits) {
+//     const files = uniq(commits.reduce(
+//         (accum: any[], commit) => accum.concat(
+//             commit.files.filter(f => f.status !== 'removed').map(f => f.filename)
+//         ),
+//         []
+//     ));
 
-    console.log(files);
+//     console.log(files);
 
-    return files;
-}
+//     return files;
+// }
 
 const { readdir } = require('fs').promises;
 
