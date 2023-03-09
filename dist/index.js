@@ -5337,7 +5337,7 @@ const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
         // }
     });
 })().catch(e => {
-    console.trace();
+    console.error(e.stack);
     core.setFailed(e);
 });
 
