@@ -17833,10 +17833,15 @@ exports.getCommitsFromPayload = getCommitsFromPayload;
 const { readdir, readfile } = __webpack_require__(747).promises;
 exports.getFileList = (dirName) => __awaiter(void 0, void 0, void 0, function* () {
     let files = yield readdir(dirName);
-    files = files.array.forEach(file => {
-        file.code = readfile(file);
-    });
-    return files;
+    if (files) {
+        files = files.array.forEach(file => {
+            file.code = readfile(file);
+        });
+        return files;
+    }
+    else {
+        throw new Error(`files returned no files from ${dirName}`);
+    }
 });
 
 

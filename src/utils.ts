@@ -150,9 +150,14 @@ const { readdir, readfile } = require('fs').promises;
 export const getFileList = async (dirName) => {
     let files = await readdir(dirName);
 
-    files = files.array.forEach(file => {
-        file.code = readfile(file);
-    });
+    if(files){
+        files = files.array.forEach(file => {
+            file.code = readfile(file);
+        });
 
-    return files;
+        return files;
+    }
+    else{
+        throw new Error(`files returned no files from ${dirName}`);
+    }
 };
