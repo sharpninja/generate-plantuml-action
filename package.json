@@ -1,24 +1,24 @@
 {
   "name": "plantuml-into-markdown",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
-    "package": "ncc build lib/main.js",
+    "package": "NODE_OPTIONS=--openssl-legacy-provider ncc build lib/main.js",
     "test": "jest",
     "test:ci": "jest --ci --coverage --reporters=default --reporters=jest-junit"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:grassedge/plantuml-into-markdown.git"
+    "url": "git@github.com:sharpninja/plantuml-into-markdown.git"
   },
   "keywords": [
     "actions",
     "node",
     "plantuml"
   ],
-  "author": "grassedge",
+  "author": "grassedge, sharpninja",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.6",
