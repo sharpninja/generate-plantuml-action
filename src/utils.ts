@@ -118,6 +118,7 @@ export async function getCommitsFromPayload(octokit, payload) {
         return results;
     }
     else{
+        console.log("payload", payload);
         console.log("commits",commits);
         console.log("owner",owner);
         console.log("repo",repo);
