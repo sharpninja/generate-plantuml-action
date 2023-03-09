@@ -21,6 +21,7 @@ const markdownExtensions = [
 
 export function retrieveCodes(files) {
     let accum: any[] = [];
+    console.log(files);
     for(let i=0; i < files.count; i++)
     {
         const f = files[i];

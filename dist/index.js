@@ -17721,6 +17721,7 @@ const markdownExtensions = [
 ];
 function retrieveCodes(files) {
     let accum = [];
+    console.log(files);
     for (let i = 0; i < files.count; i++) {
         const f = files[i];
         const ext = f.split('.').pop();
