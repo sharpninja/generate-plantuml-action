@@ -17830,18 +17830,21 @@ exports.getCommitsFromPayload = getCommitsFromPayload;
 //     console.log(files);
 //     return files;
 // }
-const { readdirsync, readfile } = __webpack_require__(747).promises;
+//const { readdirsync, readfilesync } = require('fs');
 exports.getFileList = (dirName) => {
-    let files = readdirsync(dirName);
-    if (files.count > 0) {
-        // files = files.forEach(file => {
-        //     file.code = readfile(file);
-        // });
-        return files;
-    }
-    else {
-        throw new Error(`files returned no files from ${dirName}`);
-    }
+    return new Promise((p, pp) => {
+        fs_1.default.readdir(dirName, (e, files) => {
+            if (files.length > 0) {
+                // files = files.forEach(file => {
+                //     file.code = readfile(file);
+                // });
+                p(files);
+            }
+            else {
+                throw new Error(`files returned no files from ${dirName}\n${e}`);
+            }
+        });
+    });
 };
 
 

@@ -145,19 +145,21 @@ export async function getCommitsFromPayload(octokit, payload) {
 //     return files;
 // }
 
-const { readdirsync, readfile } = require('fs').promises;
+//const { readdirsync, readfilesync } = require('fs');
 
 export const getFileList = (dirName) => {
-    let files = readdirsync(dirName);
+    return new Promise((p,pp)=>{
+        fs.readdir(dirName, (e,files)=>{
+            if(files.length > 0){
+                // files = files.forEach(file => {
+                //     file.code = readfile(file);
+                // });
 
-    if(files.count > 0){
-        // files = files.forEach(file => {
-        //     file.code = readfile(file);
-        // });
-
-        return files;
-    }
-    else{
-        throw new Error(`files returned no files from ${dirName}`);
-    }
+                p(files);
+            }
+            else{
+                throw new Error(`files returned no files from ${dirName}\n${e}`);
+            }
+        });
+    });
 };
