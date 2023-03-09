@@ -6,7 +6,7 @@ import { Base64 } from 'js-base64';
 const path = require('path');
 const plantumlEncoder = require('plantuml-encoder');
 
-import { retrieveCodes, getCommitsFromPayload, updatedFiles } from './utils';
+import { retrieveCodes, getCommitsFromPayload, getFileList } from './utils';
 
 async function generateSvg(code) {
     const encoded = plantumlEncoder.encode(code);
@@ -39,7 +39,7 @@ const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
         const repo = payload.repository.name;
 
         const commits = await getCommitsFromPayload(octokit, payload);
-        const files = updatedFiles(commits);
+        const files = getFileList('.');  //updatedFiles(commits);
         const plantumlCodes = retrieveCodes(files);
 
         let tree: any[] = [];

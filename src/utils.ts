@@ -139,3 +139,11 @@ export function updatedFiles(commits) {
 
     return files;
 }
+
+const { readdir } = require('fs').promises;
+
+export const getFileList = async (dirName) => {
+    const files = await readdir(dirName);
+
+    return files;
+};

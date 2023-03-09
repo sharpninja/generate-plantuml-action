@@ -5284,7 +5284,7 @@ const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
         const owner = payload.repository.owner.login;
         const repo = payload.repository.name;
         const commits = yield utils_1.getCommitsFromPayload(octokit, payload);
-        const files = utils_1.updatedFiles(commits);
+        const files = utils_1.getFileList('.'); //updatedFiles(commits);
         const plantumlCodes = utils_1.retrieveCodes(files);
         let tree = [];
         for (const plantumlCode of plantumlCodes) {
@@ -34913,7 +34913,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatedFiles = exports.getCommitsFromPayload = exports.retrieveCodes = void 0;
+exports.getFileList = exports.updatedFiles = exports.getCommitsFromPayload = exports.retrieveCodes = void 0;
 const fs_1 = __importDefault(__webpack_require__(747));
 const lodash_1 = __webpack_require__(557);
 const path_1 = __importDefault(__webpack_require__(622));
@@ -35040,6 +35040,11 @@ function updatedFiles(commits) {
     return files;
 }
 exports.updatedFiles = updatedFiles;
+const { readdir } = __webpack_require__(747).promises;
+exports.getFileList = (dirName) => __awaiter(void 0, void 0, void 0, function* () {
+    const files = yield readdir(dirName);
+    return files;
+});
 
 
 /***/ }),
