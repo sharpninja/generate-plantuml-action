@@ -1,6 +1,6 @@
 name: release
 on: 
-  release: created
+  #release: created
   workflow_dispatch:
   
 jobs:
