@@ -1,0 +1,21 @@
+name: release
+on: release
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    name: release
+    env:
+      CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: install depedencies
+        run: npm install
+      - name: run tests
+        run: "npm run test:ci"
+        env:
+          CI: true
