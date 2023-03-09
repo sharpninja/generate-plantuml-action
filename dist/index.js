@@ -17842,6 +17842,7 @@ function getFileList(dirName) {
             console.log(`files: ${files}`);
             if (files.length > 0) {
                 files.forEach((item) => __awaiter(this, void 0, void 0, function* () {
+                    files[files.indexOf(item)] = `${dirName}/${item}`;
                     if (fs_1.default.statSync(`${dirName}/${item}`).isDirectory()) {
                         const s = yield getFileList(`${dirName}/${item}`);
                         s.forEach(element => {
