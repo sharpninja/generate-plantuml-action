@@ -5285,10 +5285,11 @@ const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
         const files = utils_1.getFileList('.'); //updatedFiles(commits);
         const plantumlCodes = utils_1.retrieveCodes(files);
         let tree = [];
-        for (const plantumlCode of plantumlCodes) {
+        let plantumlCode;
+        for (plantumlCode of plantumlCodes) {
             const p = path.format({
-                dir: (diagramPath === '.') ? plantumlCode.dir : diagramPath,
-                name: plantumlCode.name,
+                dir: diagramPath,
+                name: path.name(plantumlCode),
                 ext: '.svg'
             });
             const svg = yield generateSvg(plantumlCode.code);
@@ -17717,19 +17718,22 @@ const markdownExtensions = [
     '.md.txt',
 ];
 function retrieveCodes(files) {
-    return files.reduce((accum, f) => {
-        const p = path_1.default.parse(f);
-        if (umlFileExtensions.indexOf(p.ext) !== -1) {
-            const acc = accum.concat({
-                name: p.name,
+    let accum = [];
+    for (let i = 0; i < files.count; i++) {
+        const f = files[i];
+        const ext = f.split('.').pop();
+        if (umlFileExtensions.indexOf(ext) !== -1) {
+            const acc = {
+                name: f,
                 // TODO: files may have been deleted.
                 code: fs_1.default.readFileSync(f).toString(),
-                dir: p.dir
-            });
+                dir: path_1.default.dirname(f)
+            };
             console.log(acc);
-            return acc;
+            accum.push(acc);
+            // return acc;
         }
-        if (markdownExtensions.indexOf(p.ext) !== -1) {
+        if (markdownExtensions.indexOf(ext) !== -1) {
             // TODO: files may have been deleted.
             const content = fs_1.default.readFileSync(f).toString();
             const dir = path_1.default.dirname(f);
@@ -17738,13 +17742,13 @@ function retrieveCodes(files) {
                 code.dir = path_1.default.dirname(f);
                 return code;
             });
-            const acc = accum.concat(codes);
-            console.log(acc);
-            return acc;
+            console.log(codes);
+            accum.push(codes);
+            // return acc;
         }
-        console.log(accum);
-        return accum;
-    }, []);
+    }
+    console.log(accum);
+    return accum;
 }
 exports.retrieveCodes = retrieveCodes;
 const infoRegexp = /^plantuml(?:@(.+))?:([\w-_.]+)/;
@@ -17826,9 +17830,12 @@ exports.getCommitsFromPayload = getCommitsFromPayload;
 //     console.log(files);
 //     return files;
 // }
-const { readdir } = __webpack_require__(747).promises;
+const { readdir, readfile } = __webpack_require__(747).promises;
 exports.getFileList = (dirName) => __awaiter(void 0, void 0, void 0, function* () {
-    const files = yield readdir(dirName);
+    let files = yield readdir(dirName);
+    files = files.array.forEach(file => {
+        file.code = readfile(file);
+    });
     return files;
 });
 

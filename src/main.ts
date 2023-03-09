@@ -43,10 +43,11 @@ const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
         const plantumlCodes = retrieveCodes(files);
 
         let tree: any[] = [];
-        for (const plantumlCode of plantumlCodes) {
+        let plantumlCode: any;
+        for (plantumlCode of plantumlCodes) {
             const p = path.format({
-                dir: (diagramPath === '.') ? plantumlCode.dir : diagramPath,
-                name: plantumlCode.name,
+                dir: diagramPath,
+                name: path.name(plantumlCode),
                 ext: '.svg'
             });
 

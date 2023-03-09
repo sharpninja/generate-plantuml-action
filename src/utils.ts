@@ -20,19 +20,23 @@ const markdownExtensions = [
 ];
 
 export function retrieveCodes(files) {
-    return files.reduce((accum, f) => {
-        const p = path.parse(f);
-        if (umlFileExtensions.indexOf(p.ext) !== -1) {
-            const acc = accum.concat({
-                name: p.name,
+    let accum: any[] = [];
+    for(let i=0; i < files.count; i++)
+    {
+        const f = files[i];
+        const ext = f.split('.').pop();
+        if (umlFileExtensions.indexOf(ext) !== -1) {
+            const acc = {
+                name: f,
                 // TODO: files may have been deleted.
                 code: fs.readFileSync(f).toString(),
-                dir: p.dir
-            });
+                dir:  path.dirname(f)
+            };
             console.log(acc);
-            return acc;
+            accum.push(acc);
+            // return acc;
         }
-        if (markdownExtensions.indexOf(p.ext) !== -1) {
+        if (markdownExtensions.indexOf(ext) !== -1) {
             // TODO: files may have been deleted.
             const content = fs.readFileSync(f).toString();
             const dir = path.dirname(f);
@@ -41,13 +45,14 @@ export function retrieveCodes(files) {
                 code.dir = path.dirname(f)
                 return code;
             })
-            const acc = accum.concat(codes);
-            console.log(acc);
-            return acc;
+            console.log(codes);
+            accum.push(codes);
+            // return acc;
         }
+    }
         console.log(accum);
         return accum;
-    }, []);
+
 }
 
 const infoRegexp = /^plantuml(?:@(.+))?:([\w-_.]+)/;
@@ -140,10 +145,14 @@ export async function getCommitsFromPayload(octokit, payload) {
 //     return files;
 // }
 
-const { readdir } = require('fs').promises;
+const { readdir, readfile } = require('fs').promises;
 
 export const getFileList = async (dirName) => {
-    const files = await readdir(dirName);
+    let files = await readdir(dirName);
+
+    files = files.array.forEach(file => {
+        file.code = readfile(file);
+    });
 
     return files;
 };
