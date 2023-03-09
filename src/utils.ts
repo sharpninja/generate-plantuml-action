@@ -25,6 +25,8 @@ export function retrieveCodes(files) {
     {
         const f = files[i];
         const ext = f.split('.').pop();
+        const umlIndex = umlFileExtensions.indexOf(ext);
+        console.log(`${f}: umlIndex: ${umlIndex}`);
         if (umlFileExtensions.indexOf(ext) !== -1) {
             const acc = {
                 name: f,
@@ -36,6 +38,8 @@ export function retrieveCodes(files) {
             accum.push(acc);
             // return acc;
         }
+        const mdIndex = markdownExtensions.indexOf(ext);
+        console.log(`${f}: mdIndex: ${mdIndex}`);
         if (markdownExtensions.indexOf(ext) !== -1) {
             // TODO: files may have been deleted.
             const content = fs.readFileSync(f).toString();
