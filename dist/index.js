@@ -17752,8 +17752,10 @@ function retrieveCodes(files) {
                 code.dir = path_1.default.dirname(f);
                 return code;
             });
-            console.log(codes);
-            accum.push(codes);
+            if (codes.length > 0) {
+                console.log(codes);
+                accum.push(codes);
+            }
             // return acc;
         }
     });
