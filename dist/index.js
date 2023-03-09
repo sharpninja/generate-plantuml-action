@@ -5282,7 +5282,7 @@ const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
         const owner = payload.repository.owner.login;
         const repo = payload.repository.name;
         //const commits = await getCommitsFromPayload(octokit, payload);
-        const files = yield utils_1.getFileList('.'); //updatedFiles(commits);
+        const files = yield utils_1.getFileList('./docs'); //updatedFiles(commits);
         console.log(`files: ${files}`);
         const plantumlCodes = utils_1.retrieveCodes(files);
         console.log(`plantumlCodes: ${plantumlCodes}`);

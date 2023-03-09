@@ -39,7 +39,7 @@ const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
         const repo = payload.repository.name;
 
         //const commits = await getCommitsFromPayload(octokit, payload);
-        const files = await getFileList('.');  //updatedFiles(commits);
+        const files = await getFileList('./docs');  //updatedFiles(commits);
         console.log(`files: ${files}`);
 
         const plantumlCodes = retrieveCodes(files);
