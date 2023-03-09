@@ -17833,13 +17833,21 @@ exports.getCommitsFromPayload = getCommitsFromPayload;
 //     return files;
 // }
 //const { readdirsync, readfilesync } = require('fs');
-exports.getFileList = (dirName) => {
+function getFileList(dirName) {
     console.log(`dirName: ${dirName}`);
     return new Promise((resolve, reject) => {
         fs_1.default.readdir(dirName, (e, files) => {
             console.log(`e: ${e}`);
             console.log(`files: ${files}`);
             if (files.length > 0) {
+                files.forEach((item) => __awaiter(this, void 0, void 0, function* () {
+                    if (fs_1.default.statSync(`${dirName}/${item}`).isDirectory()) {
+                        const s = yield getFileList(`${dirName}/${item}`);
+                        s.forEach(element => {
+                            files.push(element);
+                        });
+                    }
+                }));
                 resolve(files);
             }
             else {
@@ -17847,7 +17855,9 @@ exports.getFileList = (dirName) => {
             }
         });
     });
-};
+}
+exports.getFileList = getFileList;
+;
 
 
 /***/ }),
