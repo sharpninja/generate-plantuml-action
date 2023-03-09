@@ -17699,7 +17699,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFileList = exports.getCommitsFromPayload = exports.retrieveCodes = void 0;
+exports.getFileList = exports.retrieveCodes = void 0;
 const fs_1 = __importDefault(__webpack_require__(747));
 const path_1 = __importDefault(__webpack_require__(622));
 const markdownit = __webpack_require__(717);
@@ -17793,39 +17793,36 @@ function puFromMd(markdown) {
     console.log(reduced);
     return reduced;
 }
-function getCommitsFromPayload(octokit, payload) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const commits = payload.commits;
-        const owner = payload.repository.owner.login;
-        const repo = payload.repository.name;
-        if (commits && owner && repo) {
-            const lambda = commit => {
-                try {
-                    const cmt = octokit.repos.getCommit({
-                        owner, repo, ref: commit.id
-                    });
-                    return cmt;
-                }
-                catch (e) {
-                    console.error(e);
-                    console.error(e.stack);
-                }
-            };
-            const res = yield Promise.all(commits.map(lambda));
-            const results = res.map(res => res.data);
-            console.log(results);
-            return results;
-        }
-        else {
-            console.log("payload", payload);
-            console.log("commits", commits);
-            console.log("owner", owner);
-            console.log("repo", repo);
-            return [];
-        }
-    });
-}
-exports.getCommitsFromPayload = getCommitsFromPayload;
+// export async function getCommitsFromPayload(octokit, payload) {
+//     const commits = payload.commits;
+//     const owner   = payload.repository.owner.login;
+//     const repo    = payload.repository.name;
+//     if(commits && owner && repo){
+//         const lambda = commit => {
+//             try{
+//                 const cmt = octokit.repos.getCommit({
+//                     owner, repo, ref: commit.id
+//                 });
+//                 return cmt;
+//             }
+//             catch(e) {
+//                 console.error(e);
+//                 console.error(e.stack);
+//             }
+//         }
+//         const res = await Promise.all(commits.map(lambda));
+//         const results = res.map(res => (<any>res).data);
+//         console.log(results);
+//         return results;
+//     }
+//     else{
+//         console.log("payload", payload);
+//         console.log("commits",commits);
+//         console.log("owner",owner);
+//         console.log("repo",repo);
+//         return [];
+//     }
+// }
 // export function updatedFiles(commits) {
 //     const files = uniq(commits.reduce(
 //         (accum: any[], commit) => accum.concat(
@@ -17848,7 +17845,7 @@ function getFileList(dirName) {
                     if (fs_1.default.statSync(`${dirName}/${item}`).isDirectory()) {
                         const s = yield getFileList(`${dirName}/${item}`);
                         s.forEach(element => {
-                            files.push(element);
+                            files.push(`${dirName}/${item}/${element}`);
                         });
                     }
                 }));

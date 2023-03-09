@@ -6,7 +6,7 @@ import { Base64 } from 'js-base64';
 const path = require('path');
 const plantumlEncoder = require('plantuml-encoder');
 
-import { retrieveCodes, getCommitsFromPayload, getFileList } from './utils';
+import { retrieveCodes, getFileList } from './utils';
 
 async function generateSvg(code) {
     const encoded = plantumlEncoder.encode(code);
