@@ -17704,20 +17704,20 @@ const fs_1 = __importDefault(__webpack_require__(747));
 const path_1 = __importDefault(__webpack_require__(622));
 const markdownit = __webpack_require__(717);
 const umlFileExtensions = [
-    '.pu',
-    '.pml',
-    '.puml',
-    '.plantuml',
+    'pu',
+    'pml',
+    'puml',
+    'plantuml',
 ];
 const markdownExtensions = [
-    '.md',
-    '.markdown',
-    '.mdown',
-    '.mkdn',
-    '.mdwn',
-    '.mkd',
-    '.mdn',
-    '.md.txt',
+    'md',
+    'markdown',
+    'mdown',
+    'mkdn',
+    'mdwn',
+    'mkd',
+    'mdn',
+    'md.txt',
 ];
 function retrieveCodes(files) {
     let accum = [];

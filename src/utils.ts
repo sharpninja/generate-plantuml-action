@@ -3,20 +3,20 @@ import { uniq } from 'lodash';
 import path from 'path';
 const markdownit = require('markdown-it');
 const umlFileExtensions = [
-    '.pu',
-    '.pml',
-    '.puml',
-    '.plantuml',
+    'pu',
+    'pml',
+    'puml',
+    'plantuml',
 ];
 const markdownExtensions = [
-    '.md',
-    '.markdown',
-    '.mdown',
-    '.mkdn',
-    '.mdwn',
-    '.mkd',
-    '.mdn',
-    '.md.txt',
+    'md',
+    'markdown',
+    'mdown',
+    'mkdn',
+    'mdwn',
+    'mkd',
+    'mdn',
+    'md.txt',
 ];
 
 export function retrieveCodes(files) {
