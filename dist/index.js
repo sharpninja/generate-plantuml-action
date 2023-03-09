@@ -5262,6 +5262,7 @@ function generateSvg(code) {
         }
         catch (e) {
             // TODO
+            console.error(e);
         }
     });
 }
@@ -5331,7 +5332,7 @@ const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
         console.log(`${tree.map(t => t.path).join("\n")}\nAbove files are generated.`);
     });
 })().catch(e => {
-    console.error(e);
+    console.error(`Encountered error: ${e}`);
     core.setFailed(e);
 });
 
@@ -34932,12 +34933,14 @@ function retrieveCodes(files) {
     return files.reduce((accum, f) => {
         const p = path_1.default.parse(f);
         if (umlFileExtensions.indexOf(p.ext) !== -1) {
-            return accum.concat({
+            const acc = accum.concat({
                 name: p.name,
                 // TODO: files may have been deleted.
                 code: fs_1.default.readFileSync(f).toString(),
                 dir: p.dir
             });
+            console.log(acc);
+            return acc;
         }
         if (markdownExtensions.indexOf(p.ext) !== -1) {
             // TODO: files may have been deleted.
@@ -34948,7 +34951,9 @@ function retrieveCodes(files) {
                 code.dir = path_1.default.dirname(f);
                 return code;
             });
-            return accum.concat(codes);
+            const acc = accum.concat(codes);
+            console.log(acc);
+            return acc;
         }
         console.log(accum);
         return accum;
@@ -34961,17 +34966,19 @@ function puFromMd(markdown) {
     const fences = md.parse(markdown, {})
         .filter(token => token.type === 'fence')
         .filter(token => infoRegexp.test(token.info));
-    return fences.reduce((accum, fence) => {
+    const reduced = fences.reduce((accum, fence) => {
         const [, umlType, name] = fence.info.match(infoRegexp) || [];
         const [, typeInContent] = fence.content.match(/^(@start\w+)/) || [];
         if (!name) {
             return accum;
         }
         if (typeInContent) {
-            return accum.concat({
+            const acc = accum.concat({
                 name,
                 code: fence.content
             });
+            console.log(acc);
+            return acc;
         }
         const t = umlType || 'uml';
         const results = accum.concat({
@@ -34986,6 +34993,8 @@ function puFromMd(markdown) {
         console.log(results);
         return results;
     }, []);
+    console.log(reduced);
+    return reduced;
 }
 function getCommitsFromPayload(octokit, payload) {
     return __awaiter(this, void 0, void 0, function* () {

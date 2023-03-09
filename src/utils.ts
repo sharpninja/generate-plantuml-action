@@ -23,12 +23,14 @@ export function retrieveCodes(files) {
     return files.reduce((accum, f) => {
         const p = path.parse(f);
         if (umlFileExtensions.indexOf(p.ext) !== -1) {
-            return accum.concat({
+            const acc = accum.concat({
                 name: p.name,
                 // TODO: files may have been deleted.
                 code: fs.readFileSync(f).toString(),
                 dir: p.dir
             });
+            console.log(acc);
+            return acc;
         }
         if (markdownExtensions.indexOf(p.ext) !== -1) {
             // TODO: files may have been deleted.
@@ -39,7 +41,9 @@ export function retrieveCodes(files) {
                 code.dir = path.dirname(f)
                 return code;
             })
-            return accum.concat(codes);
+            const acc = accum.concat(codes);
+            console.log(acc);
+            return acc;
         }
         console.log(accum);
         return accum;
@@ -54,7 +58,7 @@ function puFromMd(markdown) {
         .filter(token => token.type === 'fence')
         .filter(token => infoRegexp.test(token.info));
 
-    return fences.reduce((accum, fence) => {
+    const reduced = fences.reduce((accum, fence) => {
         const [, umlType, name] = fence.info.match(infoRegexp) || [];
         const [, typeInContent] = fence.content.match(/^(@start\w+)/) || [];
 
@@ -62,10 +66,12 @@ function puFromMd(markdown) {
             return accum;
         }
         if (typeInContent) {
-            return accum.concat({
+            const acc = accum.concat({
                 name,
                 code: fence.content
             })
+            console.log(acc);
+            return acc;
         }
         const t = umlType || 'uml';
         const results = accum.concat({
@@ -80,6 +86,9 @@ function puFromMd(markdown) {
         console.log(results);
         return results;
     }, []);
+
+    console.log(reduced);
+    return reduced;
 }
 
 export async function getCommitsFromPayload(octokit, payload) {
@@ -91,9 +100,9 @@ export async function getCommitsFromPayload(octokit, payload) {
         owner, repo, ref: commit.id
     })));
     const results = res.map(res => (<any>res).data);
-    
+
     console.log(results);
-    
+
     return results;
 }
 
@@ -104,8 +113,8 @@ export function updatedFiles(commits) {
         ),
         []
     ));
-    
+
     console.log(files);
-    
+
     return files;
 }
