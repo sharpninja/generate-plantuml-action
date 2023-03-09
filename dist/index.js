@@ -35006,9 +35006,19 @@ function getCommitsFromPayload(octokit, payload) {
         const commits = payload.commits;
         const owner = payload.repository.owner.login;
         const repo = payload.repository.name;
-        const res = yield Promise.all(commits.map(commit => octokit.repos.getCommit({
-            owner, repo, ref: commit.id
-        })));
+        const lambda = commit => {
+            try {
+                const cmt = octokit.repos.getCommit({
+                    owner, repo, ref: commit.id
+                });
+                return cmt;
+            }
+            catch (e) {
+                console.error(e);
+                console.error(e.stack);
+            }
+        };
+        const res = yield Promise.all(commits.map(lambda));
         const results = res.map(res => res.data);
         console.log(results);
         return results;
