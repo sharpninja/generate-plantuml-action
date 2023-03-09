@@ -96,25 +96,34 @@ export async function getCommitsFromPayload(octokit, payload) {
     const owner   = payload.repository.owner.login;
     const repo    = payload.repository.name;
 
-    const lambda = commit => {
-        try{
-            const cmt = octokit.repos.getCommit({
-                owner, repo, ref: commit.id
-            });
-            return cmt;
+    if(commits && owner && repo){
+        const lambda = commit => {
+            try{
+                const cmt = octokit.repos.getCommit({
+                    owner, repo, ref: commit.id
+                });
+                return cmt;
+            }
+            catch(e) {
+                console.error(e);
+                console.error(e.stack);
+            }
         }
-        catch(e) {
-            console.error(e);
-            console.error(e.stack);
-        }
+
+        const res = await Promise.all(commits.map(lambda));
+        const results = res.map(res => (<any>res).data);
+
+        console.log(results);
+
+        return results;
     }
+    else{
+        console.log("commits",commits);
+        console.log("owner",owner);
+        console.log("repo",repo);
 
-    const res = await Promise.all(commits.map(lambda));
-    const results = res.map(res => (<any>res).data);
-
-    console.log(results);
-
-    return results;
+        return [];
+    }
 }
 
 export function updatedFiles(commits) {
