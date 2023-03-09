@@ -97,8 +97,10 @@ const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
         console.log(`${tree.map(t => t.path).join("\n")}\nAbove files are generated.`);
     }
     catch (e) {
-        console.error(`Encountered error: ${e}`);
+        console.trace();
+        core.setFailed(e);
     }
 })().catch(e => {
+    console.trace();
     core.setFailed(e);
 });
