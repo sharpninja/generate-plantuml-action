@@ -17722,8 +17722,7 @@ const markdownExtensions = [
 function retrieveCodes(files) {
     let accum = [];
     console.log(files);
-    for (let i = 0; i < files.count; i++) {
-        const f = files[i];
+    files.forEach(f => {
         const ext = f.split('.').pop();
         const umlIndex = umlFileExtensions.indexOf(ext);
         console.log(`${f}: umlIndex: ${umlIndex}`);
@@ -17753,8 +17752,8 @@ function retrieveCodes(files) {
             accum.push(codes);
             // return acc;
         }
-    }
-    console.log(accum);
+    });
+    console.log("accum", accum);
     return accum;
 }
 exports.retrieveCodes = retrieveCodes;

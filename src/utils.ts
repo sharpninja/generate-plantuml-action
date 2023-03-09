@@ -22,9 +22,8 @@ const markdownExtensions = [
 export function retrieveCodes(files) {
     let accum: any[] = [];
     console.log(files);
-    for(let i=0; i < files.count; i++)
+    files.forEach(f =>
     {
-        const f = files[i];
         const ext = f.split('.').pop();
         const umlIndex = umlFileExtensions.indexOf(ext);
         console.log(`${f}: umlIndex: ${umlIndex}`);
@@ -54,10 +53,9 @@ export function retrieveCodes(files) {
             accum.push(codes);
             // return acc;
         }
-    }
-        console.log(accum);
-        return accum;
-
+    });
+    console.log("accum",accum);
+    return accum;
 }
 
 const infoRegexp = /^plantuml(?:@(.+))?:([\w-_.]+)/;
