@@ -151,7 +151,7 @@ export const getFileList = async (dirName) => {
     let files = await readdir(dirName);
 
     if(files){
-        files = files.array.forEach(file => {
+        files = files.forEach(file => {
             file.code = readfile(file);
         });
 
