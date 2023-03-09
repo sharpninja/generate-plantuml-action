@@ -17830,9 +17830,9 @@ exports.getCommitsFromPayload = getCommitsFromPayload;
 //     console.log(files);
 //     return files;
 // }
-const { readdir, readfile } = __webpack_require__(747).promises;
-exports.getFileList = (dirName) => __awaiter(void 0, void 0, void 0, function* () {
-    let files = yield readdir(dirName);
+const { readdirsync, readfile } = __webpack_require__(747).promises;
+exports.getFileList = (dirName) => {
+    let files = readdirsync(dirName);
     if (files.count > 0) {
         // files = files.forEach(file => {
         //     file.code = readfile(file);
@@ -17842,7 +17842,7 @@ exports.getFileList = (dirName) => __awaiter(void 0, void 0, void 0, function* (
     else {
         throw new Error(`files returned no files from ${dirName}`);
     }
-});
+};
 
 
 /***/ }),
