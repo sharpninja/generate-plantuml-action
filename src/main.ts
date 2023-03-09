@@ -29,7 +29,7 @@ if (!process.env.GITHUB_TOKEN) {
 const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
 
 (async function main() {
-    try {
+    //try {
         const payload = github.context.payload;
         const ref = payload.ref;
         if (!payload.repository) {
@@ -95,11 +95,10 @@ const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
         });
 
         console.log(`${tree.map(t => t.path).join("\n")}\nAbove files are generated.`);
-    }
-    catch (e) {
-        console.trace();
-        core.setFailed(e);
-    }
+    // }
+    // catch (e) {
+    //     throw e;
+    // }
 })().catch(e => {
     console.trace();
     core.setFailed(e);
