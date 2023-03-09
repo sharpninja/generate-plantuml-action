@@ -5275,64 +5275,68 @@ if (!process.env.GITHUB_TOKEN) {
 const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
 (function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        const payload = github.context.payload;
-        const ref = payload.ref;
-        if (!payload.repository) {
-            throw new Error();
-        }
-        const owner = payload.repository.owner.login;
-        const repo = payload.repository.name;
-        const commits = yield utils_1.getCommitsFromPayload(octokit, payload);
-        const files = utils_1.updatedFiles(commits);
-        const plantumlCodes = utils_1.retrieveCodes(files);
-        let tree = [];
-        for (const plantumlCode of plantumlCodes) {
-            const p = path.format({
-                dir: (diagramPath === '.') ? plantumlCode.dir : diagramPath,
-                name: plantumlCode.name,
-                ext: '.svg'
-            });
-            const svg = yield generateSvg(plantumlCode.code);
-            const blobRes = yield octokit.git.createBlob({
-                owner, repo,
-                content: js_base64_1.Base64.encode(svg),
-                encoding: 'base64',
-            });
-            const sha = yield octokit.repos.getContents({
-                owner, repo, ref, path: p
-            }).then(res => res.data.sha).catch(e => undefined);
-            if (blobRes.data.sha !== sha) {
-                tree = tree.concat({
-                    path: p.toString(),
-                    mode: "100644",
-                    type: "blob",
-                    sha: blobRes.data.sha
-                });
+        try {
+            const payload = github.context.payload;
+            const ref = payload.ref;
+            if (!payload.repository) {
+                throw new Error();
             }
+            const owner = payload.repository.owner.login;
+            const repo = payload.repository.name;
+            const commits = yield utils_1.getCommitsFromPayload(octokit, payload);
+            const files = utils_1.updatedFiles(commits);
+            const plantumlCodes = utils_1.retrieveCodes(files);
+            let tree = [];
+            for (const plantumlCode of plantumlCodes) {
+                const p = path.format({
+                    dir: (diagramPath === '.') ? plantumlCode.dir : diagramPath,
+                    name: plantumlCode.name,
+                    ext: '.svg'
+                });
+                const svg = yield generateSvg(plantumlCode.code);
+                const blobRes = yield octokit.git.createBlob({
+                    owner, repo,
+                    content: js_base64_1.Base64.encode(svg),
+                    encoding: 'base64',
+                });
+                const sha = yield octokit.repos.getContents({
+                    owner, repo, ref, path: p
+                }).then(res => res.data.sha).catch(e => undefined);
+                if (blobRes.data.sha !== sha) {
+                    tree = tree.concat({
+                        path: p.toString(),
+                        mode: "100644",
+                        type: "blob",
+                        sha: blobRes.data.sha
+                    });
+                }
+            }
+            if (tree.length === 0) {
+                console.log(`There are no files to be generated.`);
+                return;
+            }
+            const treeRes = yield octokit.git.createTree({
+                owner, repo, tree,
+                base_tree: commits[commits.length - 1].commit.tree.sha,
+            });
+            const createdCommitRes = yield octokit.git.createCommit({
+                owner, repo,
+                message: commitMessage,
+                parents: [commits[commits.length - 1].sha],
+                tree: treeRes.data.sha,
+            });
+            const updatedRefRes = yield octokit.git.updateRef({
+                owner, repo,
+                ref: ref.replace(/^refs\//, ''),
+                sha: createdCommitRes.data.sha,
+            });
+            console.log(`${tree.map(t => t.path).join("\n")}\nAbove files are generated.`);
         }
-        if (tree.length === 0) {
-            console.log(`There are no files to be generated.`);
-            return;
+        catch (e) {
+            console.error(`Encountered error: ${e}`);
         }
-        const treeRes = yield octokit.git.createTree({
-            owner, repo, tree,
-            base_tree: commits[commits.length - 1].commit.tree.sha,
-        });
-        const createdCommitRes = yield octokit.git.createCommit({
-            owner, repo,
-            message: commitMessage,
-            parents: [commits[commits.length - 1].sha],
-            tree: treeRes.data.sha,
-        });
-        const updatedRefRes = yield octokit.git.updateRef({
-            owner, repo,
-            ref: ref.replace(/^refs\//, ''),
-            sha: createdCommitRes.data.sha,
-        });
-        console.log(`${tree.map(t => t.path).join("\n")}\nAbove files are generated.`);
     });
 })().catch(e => {
-    console.error(`Encountered error: ${e}`);
     core.setFailed(e);
 });
 
