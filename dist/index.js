@@ -5282,8 +5282,10 @@ const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
         const owner = payload.repository.owner.login;
         const repo = payload.repository.name;
         //const commits = await getCommitsFromPayload(octokit, payload);
-        const files = utils_1.getFileList('.'); //updatedFiles(commits);
+        const files = yield utils_1.getFileList('.'); //updatedFiles(commits);
+        console.log(`files: ${files}`);
         const plantumlCodes = utils_1.retrieveCodes(files);
+        console.log(`plantumlCodes: ${plantumlCodes}`);
         let tree = [];
         let plantumlCode;
         for (plantumlCode of plantumlCodes) {
@@ -17833,12 +17835,12 @@ exports.getCommitsFromPayload = getCommitsFromPayload;
 //const { readdirsync, readfilesync } = require('fs');
 exports.getFileList = (dirName) => {
     console.log(`dirName: ${dirName}`);
-    return new Promise((p, pp) => {
+    return new Promise((resolve, reject) => {
         fs_1.default.readdir(dirName, (e, files) => {
             console.log(`e: ${e}`);
             console.log(`files: ${files}`);
             if (files.length > 0) {
-                p(files);
+                resolve(files);
             }
             else {
                 throw new Error(`files returned no files from ${dirName}\n${e}`);
