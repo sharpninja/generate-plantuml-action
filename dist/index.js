@@ -5281,7 +5281,7 @@ const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
         }
         const owner = payload.repository.owner.login;
         const repo = payload.repository.name;
-        const commits = yield utils_1.getCommitsFromPayload(octokit, payload);
+        //const commits = await getCommitsFromPayload(octokit, payload);
         const files = utils_1.getFileList('.'); //updatedFiles(commits);
         const plantumlCodes = utils_1.retrieveCodes(files);
         let tree = [];
@@ -5313,21 +5313,21 @@ const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
             console.log(`There are no files to be generated.`);
             return;
         }
-        const treeRes = yield octokit.git.createTree({
-            owner, repo, tree,
-            base_tree: commits[commits.length - 1].commit.tree.sha,
-        });
-        const createdCommitRes = yield octokit.git.createCommit({
-            owner, repo,
-            message: commitMessage,
-            parents: [commits[commits.length - 1].sha],
-            tree: treeRes.data.sha,
-        });
-        const updatedRefRes = yield octokit.git.updateRef({
-            owner, repo,
-            ref: ref.replace(/^refs\//, ''),
-            sha: createdCommitRes.data.sha,
-        });
+        // const treeRes = await octokit.git.createTree({
+        //     owner, repo, tree,
+        //     base_tree: commits[commits.length - 1].commit.tree.sha,
+        // });
+        // const createdCommitRes = await octokit.git.createCommit({
+        //     owner, repo,
+        //     message: commitMessage,
+        //     parents: [commits[commits.length - 1].sha],
+        //     tree: treeRes.data.sha,
+        // });
+        // const updatedRefRes = await octokit.git.updateRef({
+        //     owner, repo,
+        //     ref: ref.replace(/^refs\//, ''),
+        //     sha: createdCommitRes.data.sha,
+        // });
         console.log(`${tree.map(t => t.path).join("\n")}\nAbove files are generated.`);
         // }
         // catch (e) {

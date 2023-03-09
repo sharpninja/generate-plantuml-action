@@ -38,7 +38,7 @@ const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
         const owner = payload.repository.owner.login;
         const repo = payload.repository.name;
 
-        const commits = await getCommitsFromPayload(octokit, payload);
+        //const commits = await getCommitsFromPayload(octokit, payload);
         const files = getFileList('.');  //updatedFiles(commits);
         const plantumlCodes = retrieveCodes(files);
 
@@ -76,23 +76,23 @@ const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
             return;
         }
 
-        const treeRes = await octokit.git.createTree({
-            owner, repo, tree,
-            base_tree: commits[commits.length - 1].commit.tree.sha,
-        });
+        // const treeRes = await octokit.git.createTree({
+        //     owner, repo, tree,
+        //     base_tree: commits[commits.length - 1].commit.tree.sha,
+        // });
 
-        const createdCommitRes = await octokit.git.createCommit({
-            owner, repo,
-            message: commitMessage,
-            parents: [commits[commits.length - 1].sha],
-            tree: treeRes.data.sha,
-        });
+        // const createdCommitRes = await octokit.git.createCommit({
+        //     owner, repo,
+        //     message: commitMessage,
+        //     parents: [commits[commits.length - 1].sha],
+        //     tree: treeRes.data.sha,
+        // });
 
-        const updatedRefRes = await octokit.git.updateRef({
-            owner, repo,
-            ref: ref.replace(/^refs\//, ''),
-            sha: createdCommitRes.data.sha,
-        });
+        // const updatedRefRes = await octokit.git.updateRef({
+        //     owner, repo,
+        //     ref: ref.replace(/^refs\//, ''),
+        //     sha: createdCommitRes.data.sha,
+        // });
 
         console.log(`${tree.map(t => t.path).join("\n")}\nAbove files are generated.`);
     // }
