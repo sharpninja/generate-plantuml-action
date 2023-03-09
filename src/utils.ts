@@ -26,7 +26,7 @@ export function retrieveCodes(files) {
     {
         const ext = f.split('.').pop();
         const umlIndex = umlFileExtensions.indexOf(ext);
-        console.log(`${f}: umlIndex: ${umlIndex}`);
+        console.log(`${f}, ${ext}: umlIndex: ${umlIndex}`);
         if (umlFileExtensions.indexOf(ext) !== -1) {
             const acc = {
                 name: f,
