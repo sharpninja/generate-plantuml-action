@@ -148,13 +148,13 @@ export async function getCommitsFromPayload(octokit, payload) {
 //const { readdirsync, readfilesync } = require('fs');
 
 export const getFileList = (dirName) => {
+    console.log(`dirName: ${dirName}`);
     return new Promise((p,pp)=>{
         fs.readdir(dirName, (e,files)=>{
-            if(files.length > 0){
-                // files = files.forEach(file => {
-                //     file.code = readfile(file);
-                // });
+            console.log(`e: ${e}`);
+            console.log(`files: ${files}`);
 
+            if(files.length > 0){
                 p(files);
             }
             else{

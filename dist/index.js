@@ -17832,12 +17832,12 @@ exports.getCommitsFromPayload = getCommitsFromPayload;
 // }
 //const { readdirsync, readfilesync } = require('fs');
 exports.getFileList = (dirName) => {
+    console.log(`dirName: ${dirName}`);
     return new Promise((p, pp) => {
         fs_1.default.readdir(dirName, (e, files) => {
+            console.log(`e: ${e}`);
+            console.log(`files: ${files}`);
             if (files.length > 0) {
-                // files = files.forEach(file => {
-                //     file.code = readfile(file);
-                // });
                 p(files);
             }
             else {
