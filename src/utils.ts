@@ -99,41 +99,41 @@ function puFromMd(markdown) {
     return reduced;
 }
 
-export async function getCommitsFromPayload(octokit, payload) {
-    const commits = payload.commits;
-    const owner   = payload.repository.owner.login;
-    const repo    = payload.repository.name;
+// export async function getCommitsFromPayload(octokit, payload) {
+//     const commits = payload.commits;
+//     const owner   = payload.repository.owner.login;
+//     const repo    = payload.repository.name;
 
-    if(commits && owner && repo){
-        const lambda = commit => {
-            try{
-                const cmt = octokit.repos.getCommit({
-                    owner, repo, ref: commit.id
-                });
-                return cmt;
-            }
-            catch(e) {
-                console.error(e);
-                console.error(e.stack);
-            }
-        }
+//     if(commits && owner && repo){
+//         const lambda = commit => {
+//             try{
+//                 const cmt = octokit.repos.getCommit({
+//                     owner, repo, ref: commit.id
+//                 });
+//                 return cmt;
+//             }
+//             catch(e) {
+//                 console.error(e);
+//                 console.error(e.stack);
+//             }
+//         }
 
-        const res = await Promise.all(commits.map(lambda));
-        const results = res.map(res => (<any>res).data);
+//         const res = await Promise.all(commits.map(lambda));
+//         const results = res.map(res => (<any>res).data);
 
-        console.log(results);
+//         console.log(results);
 
-        return results;
-    }
-    else{
-        console.log("payload", payload);
-        console.log("commits",commits);
-        console.log("owner",owner);
-        console.log("repo",repo);
+//         return results;
+//     }
+//     else{
+//         console.log("payload", payload);
+//         console.log("commits",commits);
+//         console.log("owner",owner);
+//         console.log("repo",repo);
 
-        return [];
-    }
-}
+//         return [];
+//     }
+// }
 
 // export function updatedFiles(commits) {
 //     const files = uniq(commits.reduce(
@@ -159,10 +159,11 @@ export function getFileList(dirName) : Promise<any[]>  {
 
             if(files.length > 0){
                 files.forEach(async item => {
+                    files[files.indexOf(item)] = `${dirName}/${item}`;
                     if (fs.statSync(`${dirName}/${item}`).isDirectory()) {
                         const s = await getFileList(`${dirName}/${item}`);
                         s.forEach(element => {
-                            files.push(element);
+                            files.push(`${dirName}/${item}/${element}`);
                         });
                     }
                 });
