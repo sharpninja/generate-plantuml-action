@@ -17833,7 +17833,7 @@ exports.getCommitsFromPayload = getCommitsFromPayload;
 const { readdir, readfile } = __webpack_require__(747).promises;
 exports.getFileList = (dirName) => __awaiter(void 0, void 0, void 0, function* () {
     let files = yield readdir(dirName);
-    if (files) {
+    if (files.count > 0) {
         // files = files.forEach(file => {
         //     file.code = readfile(file);
         // });

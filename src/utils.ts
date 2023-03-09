@@ -150,7 +150,7 @@ const { readdir, readfile } = require('fs').promises;
 export const getFileList = async (dirName) => {
     let files = await readdir(dirName);
 
-    if(files){
+    if(files.count > 0){
         // files = files.forEach(file => {
         //     file.code = readfile(file);
         // });
