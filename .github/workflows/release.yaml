@@ -19,6 +19,6 @@ jobs:
       - name: install depedencies
         run: npm install
       - name: run tests
-        run: "npm run package"
+        run: "npm run build && npm run package"
         env:
           CI: true
