@@ -5290,7 +5290,7 @@ const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
         let plantumlCode;
         for (plantumlCode of plantumlCodes) {
             console.log('plantumlCode', plantumlCode);
-            let filename = plantumlCode.split('\\').pop().split('/').pop();
+            let filename = plantumlCode.name.split('\\').pop().split('/').pop();
             filename = filename.substring(0, filename.lastIndexOf('.'));
             console.log('filename', filename);
             const p = path.format({
